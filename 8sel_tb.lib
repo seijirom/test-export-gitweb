@@ -1,0 +1,97 @@
+* E:\seijiro\work\760\8sel_tb.asc
+XX1 N002 N003 N004 N005 N006 N007 N008 0 N009 N001 N010 N011 N012 out 8-1selector
+V1 N001 0 PULSE(0 5)
+XX2 N001 N002 N003 N004 N005 N006 N007 N008 N009 8pring
+XX3 N010 N015 N011 N015 N001 0 mydff
+XX4 N011 N016 N012 N016 N001 0 mydff
+XX5 N001 N012 N001 N001 0 N001 nout mynand4
+XX6 N009 N013 N017 N013 N001 0 mydff
+XX7 N017 N014 N010 N014 N001 0 mydff
+
+* block symbol definitions
+.subckt 8-1selector A B C D E F G gnd H vdd X Y Z out
+XX1 A N001 N002 N003 gnd vdd 111 mynand4
+XX2 B N001 N002 N004 gnd vdd 110 mynand4
+XX3 C N001 N007 N003 gnd vdd 101 mynand4
+XX4 D N001 N007 N004 gnd vdd 100 mynand4
+XX6 gnd X N006 vdd myinv
+XX7 gnd N006 N001 vdd myinv
+XX8 N005 N008 gnd vdd out mynor2
+XX9 gnd Y N007 vdd myinv
+XX10 gnd N007 N002 vdd myinv
+XX11 E N006 N002 N003 gnd vdd 011 mynand4
+XX12 F N006 N002 N004 gnd vdd 010 mynand4
+XX13 G N006 N007 N003 gnd vdd 001 mynand4
+XX14 H N006 N007 N004 gnd vdd 000 mynand4
+XX16 gnd Z N004 vdd myinv
+XX17 gnd N004 N003 vdd myinv
+XX5 111 110 101 100 gnd vdd N005 mynand4
+XX15 011 010 001 000 gnd vdd N008 mynand4
+.ends 8-1selector
+
+.subckt 8pring vcc A B C D E F G H
+XX1 N001 H vcc A N002 unit
+XX2 A N002 vcc B N003 unit
+XX3 B N003 vcc C N004 unit
+XX4 C N004 vcc D N005 unit
+XX5 D N005 vcc E N006 unit
+XX6 E N006 vcc F N007 unit
+XX7 F N007 vcc G N008 unit
+XX8 G N008 vcc H N001 unit
+.ends 8pring
+
+.subckt mydff CK D Q Qb vcc gnd
+XX1 gnd D N002 vcc CK N001 myinv_c
+XX2 gnd Q Qb vcc CK N001 myinv_c
+XX3 gnd N002 N003 vcc myinv
+XX4 gnd N003 N002 vcc N001 CK myinv_c
+XX5 gnd N003 Qb vcc N001 CK myinv_c
+XX6 gnd Qb Q vcc myinv
+XX7 gnd CK N001 vcc myinv
+.ends mydff
+
+.subckt mynand4 A B C D gnd vdd Z
+M1 Z A vdd vdd pch l=2u w=18u
+M2 Z B vdd vdd pch l=2u w=18u
+M3 Z C vdd vdd pch l=2u w=18u
+M4 Z D vdd vdd pch l=2u w=18u
+M5 Z A N001 gnd nch l=2u w=6u
+M6 N001 B N002 gnd nch l=2u w=6u
+M7 N002 C N003 gnd nch l=2u w=6u
+M8 N003 D gnd gnd nch l=2u w=6u
+.ends mynand4
+
+.subckt myinv gnd in out vcc
+M1 out in gnd gnd nch l=2u w=6u
+M2 out in vcc vcc pch l=2u w=18u
+.ends myinv
+
+.subckt mynor2 A B gnd vdd C
+M1 C B gnd gnd nch l=2u w=6u
+M2 C A gnd gnd nch l=2u w=6u
+M3 C B N001 vdd pch l=2u w=18u
+M4 N001 A vdd vdd pch l=2u w=18u
+.ends mynor2
+
+.subckt unit in1 in2 Vcc out1 out2
+XX3 0 in1 Vcc N001 inverter
+XX6 0 N002 Vcc out2 inverter
+XX12 0 N001 Vcc out1 inverter
+XX17 0 in2 Vcc N002 inverter
+XX10 0 N001 Vcc N002 inverter
+XX19 0 N002 Vcc N001 inverter
+.ends unit
+
+.subckt myinv_c gnd in out vcc CK CKb
+M1 out CKb P001 gnd nch l=2u w=6u
+M2 P002 in vcc vcc pch l=2u w=18u
+M3 out CK P002 vcc pch l=2u w=18u
+M4 P001 in gnd gnd nch l=2u w=6u
+.ends myinv_c
+
+.subckt inverter Gnda In Vcc Out
+M1 Out In Gnda Gnda nch l=2u w=6u
+M2 Out In Vcc Vcc pch l=2u w=18u
+C1 Out 0 100f
+* .include "./models/mos_tt.lib"
+.ends inverter

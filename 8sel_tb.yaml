@@ -1,0 +1,9 @@
+---
+grid_size: 0.0625
+cells:
+  8-1selector: circuits
+  voltage: symbols
+  8pring: circuits
+  mydff: circuits
+  mynand4: circuits
+thick_wires: 

@@ -1,0 +1,7 @@
+---
+grid_size: 0.0625
+cells:
+  mynand4: circuits
+  myinv: circuits
+  mynor2: circuits
+thick_wires: 
